@@ -1,0 +1,14 @@
+# Python
+venv/
+__pycache__/
+*.__pyc
+
+# Django
+db.sqlite3
+*.log
+.env
+.env.local
+
+# IDE
+.vscode/
+.windsurf/
