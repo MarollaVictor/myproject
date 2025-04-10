@@ -1,6 +1,7 @@
 # mbti_app/management/commands/populate_mbti.py
 from django.core.management.base import BaseCommand
 from mbti_app.models import MBTIType, Question
+from django.conf import settings
 
 class Command(BaseCommand):
     help = 'Populate MBTI types and questions into the database'

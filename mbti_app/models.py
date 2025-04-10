@@ -1,7 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+
 
 # MBTI Personality Types (e.g., INFJ, ENTP)
+
+class PersonalityTest(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='mbti_tests')
+    opennes = models.FloatField()
+    conscientiousness = models.FloatField()
+    extraversion = models.FloatField()
+    agreeableness = models.FloatField()
+    neuroticism = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class Meta:
+    ordering = ['-timestamp']  # Newest first
+    def __str__(self):
+        return f"{self.user.username}'s OCEAN Results"
+
 class MBTIType(models.Model):
     type_code = models.CharField(max_length=4, unique=True)  # e.g., "INTJ"
     name = models.CharField(max_length=50)                   # e.g., "The Architect"
@@ -28,14 +44,14 @@ class Question(models.Model):
 
 # User Responses
 class UserResponse(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Allow anonymous
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)  # Allow anonymous
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice = models.SmallIntegerField()  # Typically 1-5 scale (1=Strongly Disagree, 5=Strongly Agree)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 # Test Results
 class TestResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     mbti_type = models.ForeignKey(MBTIType, on_delete=models.CASCADE)
     ei_score = models.FloatField()  # E vs I score
     sn_score = models.FloatField()  # S vs N score
